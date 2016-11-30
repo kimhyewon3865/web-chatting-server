@@ -6,27 +6,17 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.hyewon.chatting.model.*" %>
-<%@ page import = "java.sql.*" %>
-<%@ page import="java.util.List" %>
+<%@ page import="com.hyewon.chatting.Database" %>
+<%@ page import="java.sql.Statement" %>
 <html>
-  <head>
+<head>
     <title>$Title$</title>
-  </head>
-  <body>
+</head>
+<body>
 
-  <%
-    Class.forName("com.mysql.jdbc.Driver");
-    String url = "jdbc:mysql://localhost/javatest";
-    Connection conn = DriverManager.getConnection(url,"root","1234");
-    Statement statement = conn.createStatement();
+<%--<% Statement statement = Database.connect(); %>--%>
 
+test
 
-    List<Channel> channels = Channel.findAll(statement);
-  %>
-
-  <%--<%=hw.sayHelloWorldFrom("안뇽")%>--%>
-
-  $END$
-  </body>
+</body>
 </html>
