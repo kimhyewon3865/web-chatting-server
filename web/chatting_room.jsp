@@ -1,5 +1,6 @@
 <%@ page import="com.hyewon.chatting.model.Channel" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="com.hyewon.chatting.model.Message" %><%--
   Created by IntelliJ IDEA.
   User: ryan-yoo
   Date: 2016. 12. 1.
@@ -19,7 +20,9 @@
     <script src="js/chatting_room.js"></script>
 </head>
 <body>
-
+<%
+    String myId = "h";
+%>
 <div class="screenui">
     <!-- Navigation -->
     <div class="nav">
@@ -90,34 +93,37 @@
 
         <div class="chat" id="chat">
             <ul class="messages">
-                <% for (int i = 0; i < 10; i++) { %>
+                <%  List<Message> messages = Message.findAll(null);
+                    for (Message message: messages) {
+                        if(!message.getUserId().equals(myId)) {
+                %>
 
                 <li class="friend-with-a-SVAGina">
                     <div class="head">
-                        <span class="name">유병한</span>
-                        <span class="time">10:15 AM, Today</span>
+                         <span class="name"><%=message.getUserId()%></span>
+                        <span class="time"><%=message.getCreateAt()%></span>
                     </div>
                     <div>
-                        <div class="message">안녕ㅎㅎ</div>
+                        <div class="message"><%=message.getText()%></div>
                         <input type="image" class="friendButton"
                                src="images/star_unselected.png"
-                               id="<%= "button" + 2 * i %>" starred="false"/>
+                                starred="false"/>
                     </div>
                 </li>
-
+                <% } else {%>
                 <li class="i">
                     <div class="head">
-                        <span class="name">김혜원</span>
-                        <span class="time">10:15 AM, Today</span>
+                        <span class="name"><%=message.getUserId()%></span>
+                        <span class="time"><%=message.getCreateAt()%></span>
                     </div>
                     <div>
-                        <div class="message">안녕!!</div>
+                        <div class="message"><%=message.getText()%></div>
                         <input type="image" class="iButton" src="images/star_unselected.png"
-                               id="<%= "button" + 2 * i + 1 %>" starred="false"/>
+                               starred="false"/>
                     </div>
                 </li>
 
-                <% } %>
+                <% }} %>
             </ul>
 
             <div class="write-form">
