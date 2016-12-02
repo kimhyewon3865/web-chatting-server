@@ -156,10 +156,10 @@
             <%--<span class="send">Send</span>--%>
             <%--</div>--%>
 
-            <form class="write-form" method="post" action="send.jsp">
+            <form class="write-form">
                 <input type="textarea" class="text-area" placeholder="Type your message" name="text" id="text" rows="2">
-                <input type="hidden" name="channelId" value="<%=nowChannelId%>">
-                <span><input type="submit" class="send" value="submit" ></span>
+                <input type="hidden" name="channelId" id="channelId" value="<%=nowChannelId%>">
+                <span><input type="button" class="send" value="submit" onclick="insertMessage()"></span>
             </form>
         </div>
 
@@ -200,8 +200,15 @@
 //        var params = "channel_id=" + encodeURIComponent(channelId);
 //        new ajax.xhr.Request("getMessages.jsp", params, ?, "GET", this);
 //    }
-    var httpReq = null;
 
+    function getInstance() {
+        var httpReq = false;
+        if(window.ActiveXObject)
+            httpReq = new ActiveXOjbect("Microsoft.XMLHTTP");
+        else if(window.XMLHttpRequest)
+            httpReq = new XMLHttpRequest();
+        return httpReq;
+    }
 
     function loadMessage(channelId) {
 
@@ -209,26 +216,30 @@
         new ajax.xhr.Request("loadMessage.jsp", params, this.loadedMessage, "POST", this);
     }
 
-    function insertMessage(){
+    function insertMessage() {
+        var httpReq = getInstance();
 
-        httpReq = getInstance();
+        var text = document.getElementById("text").value;
+        var channelId = document.getElementById("channelId").value; //long type
+        var userId = "h";
 
-//        var name = document.getElementById("name").value;
-//        var age = document.getElementById("age").value;
-//        var tel = document.getElementById("tel").value;
-//        var addr = document.getElementById("addr").value;
+        var params = "text=" + text +  "&channelId=" + channelId + "&userId=" + userId;
 
-        var text = document.getParameter("text");
-        var createdAt = (new SimpleDateFormat("yyyyMMddHHmmss")).format( new Date() );
-        var channelId = request.getParameter("channelId"); //long type
-        var userId = "h";x
+        alert(params);
+        if (httpReq) {
+            //var obj = document.getElementById(divID);
+            httpReq.open("POST", 'send.jsp');
+            httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            httpReq.onreadystatechange = function () {
+                if (httpReq.readyState == 4 && httpReq.status == 200) {
+                    alert(httpReq.responseText);
+                }
+            }
 
-        var url = "insert_sql.jsp?name=" + name + "&age=" + age + "&tel=" + tel + "&addr=" + addr;
-
-        httpReq.onreadystatechange = handleInsertCustomer;
-        httpReq.open("GET", url, true);
-        httpReq.send();
+            httpReq.send(params);
+        }
     }
+
 
 </script>
 </body>
