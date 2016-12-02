@@ -328,7 +328,7 @@ body {
     height: 150px;
 }
 
-.ui .write-form textarea {
+.ui .write-form .text-area {
     height: 75px;
     margin: 17px 5%;
     width: 90%;
@@ -339,7 +339,7 @@ body {
     resize: none;
 }
 
-.ui .write-form textarea:before {
+.ui .write-form .text-area:before {
     content: '';
     clear: both;
 }

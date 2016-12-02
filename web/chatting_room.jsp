@@ -1,6 +1,11 @@
 <%@ page import="com.hyewon.chatting.model.Channel" %>
+<%@ page import="com.hyewon.chatting.model.Message" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.sql.Statement" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.hyewon.chatting.model.Message" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: ryan-yoo
   Date: 2016. 12. 1.
@@ -22,6 +27,7 @@
 <body>
 <%
     String myId = "h";
+    long nowChannelId = 1;
 %>
 <div class="screenui">
     <!-- Navigation -->
@@ -70,10 +76,20 @@
 
             <menu class="list-friends" id="list-friends">
                 <%
-                    List<Channel> channels = Channel.findAll(null);
-                    for (Channel channel : channels) {
+                    try {
+                        Class.forName("com.mysql.jdbc.Driver");
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        String url = "jdbc:mysql://localhost:3306/chatting";
+                        Connection conn = DriverManager.getConnection(url, "root", "dltmf1995");
+                        Statement stmt = conn.createStatement();
+
+                        List<Channel> channels = Channel.findAll(stmt);
+                        for (Channel channel : channels) {
                 %>
-                <li id=<%= channel.getId() %>>
+                <li onclick="onChannelSelected(<%= channel.getId() %>)" id=<%= channel.getId() %>>
                     <img width="50" height="50"
                          src=<%= channel.getImageUrl() %>>
                     <div class="info">
@@ -85,6 +101,12 @@
                     <input type="image" class="quit-chat" src="images/x.png"/>
                 </li>
                 <%
+                        }
+//                    resultSet.close();
+                        stmt.close();
+                        conn.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
                     }
                 %>
             </menu>
@@ -93,21 +115,22 @@
 
         <div class="chat" id="chat">
             <ul class="messages">
-                <%  List<Message> messages = Message.findAll(null);
-                    for (Message message: messages) {
-                        if(!message.getUserId().equals(myId)) {
+                <% List<Message> messages = Message.findAll(null);
+                    for (Message message : messages) {
+                        if (!message.getUserId().equals(myId)) {
                 %>
 
                 <li class="friend-with-a-SVAGina">
                     <div class="head">
-                         <span class="name"><%=message.getUserId()%></span>
+                        <span class="name"><%=message.getUserId()%></span>
                         <span class="time"><%=message.getCreateAt()%></span>
                     </div>
                     <div>
-                        <div class="message"><%=message.getText()%></div>
+                        <div class="message"><%=message.getText()%>
+                        </div>
                         <input type="image" class="friendButton"
                                src="images/star_unselected.png"
-                                starred="false"/>
+                               starred="false"/>
                     </div>
                 </li>
                 <% } else {%>
@@ -117,19 +140,27 @@
                         <span class="time"><%=message.getCreateAt()%></span>
                     </div>
                     <div>
-                        <div class="message"><%=message.getText()%></div>
+                        <div class="message"><%=message.getText()%>
+                        </div>
                         <input type="image" class="iButton" src="images/star_unselected.png"
                                starred="false"/>
                     </div>
                 </li>
 
-                <% }} %>
+                <% }
+                } %>
             </ul>
 
-            <div class="write-form">
-                <textarea placeholder="Type your message" name="e" id="text" rows="2"></textarea>
-                <span class="send">Send</span>
-            </div>
+            <%--<div class="write-form">--%>
+            <%--<textarea class="text-area" placeholder="Type your message" name="e" id="text" rows="2"></textarea>--%>
+            <%--<span class="send">Send</span>--%>
+            <%--</div>--%>
+
+            <form class="write-form" method="post" action="send.jsp">
+                <input type="textarea" class="text-area" placeholder="Type your message" name="text" id="text" rows="2">
+                <input type="hidden" name="channelId" value="<%=nowChannelId%>">
+                <span><input type="submit" class="send" value="submit" ></span>
+            </form>
         </div>
 
         <div class="rightMenu" id="rightMenu" style="display: none;">
@@ -162,5 +193,43 @@
     </div>
 </div>
 
+<script>
+//    function onChannelSelected(channelId) {
+    //  new ajax.xhr.Request("sendMessage.jsp", params,
+       // this.messageSended, "POST", this);
+//        var params = "channel_id=" + encodeURIComponent(channelId);
+//        new ajax.xhr.Request("getMessages.jsp", params, ?, "GET", this);
+//    }
+    var httpReq = null;
+
+
+    function loadMessage(channelId) {
+
+        var params = "channelId=" + channelId;
+        new ajax.xhr.Request("loadMessage.jsp", params, this.loadedMessage, "POST", this);
+    }
+
+    function insertMessage(){
+
+        httpReq = getInstance();
+
+//        var name = document.getElementById("name").value;
+//        var age = document.getElementById("age").value;
+//        var tel = document.getElementById("tel").value;
+//        var addr = document.getElementById("addr").value;
+
+        var text = document.getParameter("text");
+        var createdAt = (new SimpleDateFormat("yyyyMMddHHmmss")).format( new Date() );
+        var channelId = request.getParameter("channelId"); //long type
+        var userId = "h";x
+
+        var url = "insert_sql.jsp?name=" + name + "&age=" + age + "&tel=" + tel + "&addr=" + addr;
+
+        httpReq.onreadystatechange = handleInsertCustomer;
+        httpReq.open("GET", url, true);
+        httpReq.send();
+    }
+
+</script>
 </body>
 </html>

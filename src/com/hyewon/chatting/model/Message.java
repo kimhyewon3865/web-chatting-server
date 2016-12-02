@@ -13,7 +13,7 @@ public class Message {
     private long id;
     private String text;
     private boolean starred;
-    private long createdAt;
+    private String createdAt;
 
     private long channelId;
     private String userId;
@@ -62,11 +62,11 @@ public class Message {
         return starred;
     }
 
-    public Message setCreateAt(long createdAt) {
+    public Message setCreateAt(String createdAt) {
         this.createdAt = createdAt;
         return this;
     }
-    public long getCreateAt() {
+    public String getCreateAt() {
         return createdAt;
     }
 
@@ -81,7 +81,7 @@ public class Message {
             message.id = i;
             message.text = "aa";
             message.starred = false;
-            message.createdAt = 2014;
+            message.createdAt = "2014";
             message.userId = "b";
             messages.add(message);
         }
@@ -91,7 +91,7 @@ public class Message {
             message.id = 3865;
             message.text = "bb";
             message.starred = false;
-            message.createdAt = 2014;
+            message.createdAt = "2014";
             message.userId = "h";
             messages.add(message);
         }

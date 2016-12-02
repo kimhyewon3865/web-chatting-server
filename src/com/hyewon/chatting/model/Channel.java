@@ -57,7 +57,7 @@ public class Channel {
 
 		for (int i = 0; i < users.size(); i++) {
 			User user = users.get(i);
-			builder.append(user.name);
+			builder.append(user.nickName);
 			if (i < users.size() - 1)
 				builder.append(", ");
 		}
@@ -71,8 +71,8 @@ public class Channel {
 		List<User> users = new ArrayList<>();
 		for (int i = 0; i < 30; i++) {
 			User user = new User();
-			user.id = "thisisid";
-			user.name = "성시경" + i;
+			//user.id = "thisisid";
+			user.nickName = "성시경" + i;
 			user.password = "asdfasdf";
 			users.add(user);
 		}
@@ -83,23 +83,16 @@ public class Channel {
 
 	public static List<Channel> findAll(Statement statement) throws SQLException { // TODO: DB에 연결해서 구현해야함
 		List<Channel> channels = new ArrayList<>();
-//		ResultSet resultSet = statement.executeQuery("SELECT * FROM channels;");
-//		while (resultSet.next())
-//			channels.add(convertResultSetToChannel(resultSet));
-
-		for (int i = 0; i < 40; i++) {
-			Channel channel = new Channel();
-			channel.id = i;
-			channel.name = "대화방 " + i;
-			channel.imageUrl = "http://cs625730.vk.me/v625730358/1126a/qEjM1AnybRA.jpg";
-			channels.add(channel);
+		ResultSet resultSet = statement.executeQuery("SELECT * FROM channels;");
+		while (resultSet.next()) {
+			channels.add(convertResultSetToChannel(resultSet));
 		}
-
+		resultSet.close();
 		return channels;
 	}
 
 	public static Channel findById(Statement statement, long id) throws SQLException {
-		ResultSet resultSet = statement.executeQuery("SELECT * FROM channels WHERE id=" + id + ";");
+		ResultSet resultSet = statement.executeQuery("SELECT * FROM channels WHERE id= '" + id + "';");
 		if (resultSet.next())
 			return convertResultSetToChannel(resultSet);
 		else
@@ -111,6 +104,9 @@ public class Channel {
 		channel.id = resultSet.getLong("id");
 		channel.name = resultSet.getString("name");
 		channel.imageUrl = resultSet.getString("image_url");
+
+		System.out.println("channel(" + channel.id + ") >> " + channel.name);
+
 		return channel;
 	}
 }

@@ -31,5 +31,6 @@
     <orderEntry type="library" name="JAX-WS-Apache Axis" level="project" />
     <orderEntry type="library" name="jquery" level="application" />
     <orderEntry type="library" name="jquery.nicescroll" level="application" />
+    <orderEntry type="library" name="javax.servlet:jsp-api:2.0" level="project" />
   </component>
 </module>
