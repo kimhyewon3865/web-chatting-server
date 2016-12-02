@@ -15,17 +15,12 @@
 </head>
 <body>
 <%
-
-    //String text = request.getParameter("text");
-    //String createdAt = (new SimpleDateFormat("yyyyMMddHHmmss")).format( new Date() );
-    //String channelId = request.getParameter("channelId"); //long type
-    //String userId = "h";
-    Integer channelId = 2;
+    String channelId = request.getParameter("channelId");
 
     String url = "jdbc:mysql://localhost:3306/chatting";
     Connection conn = DriverManager.getConnection(url, "root", "dltmf1995");
     Statement stmt = conn.createStatement();
-    String sql = "DELETE FROM channels WHERE id = " + channelId ;
+    String sql = "DELETE FROM channels WHERE id = " + Integer.parseInt(channelId);
     out.println(sql);
     stmt.executeUpdate(sql);
 %>

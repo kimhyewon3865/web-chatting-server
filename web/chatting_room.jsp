@@ -89,7 +89,7 @@
                         List<Channel> channels = Channel.findAll(stmt);
                         for (Channel channel : channels) {
                 %>
-                <li onclick="onChannelSelected(<%= channel.getId() %>)" id=<%= channel.getId() %>>
+                <li id=<%= channel.getId() %>>
                     <img width="50" height="50"
                          src=<%= channel.getImageUrl() %>>
                     <div class="info">
@@ -98,7 +98,7 @@
                         <div class="users"><%= channel.getUserNames() %>
                         </div>
                     </div>
-                    <input type="image" class="quit-chat" src="images/x.png"/>
+                    <input type="image" class="quit-chat" src="images/x.png" onclick="quitChat(<%= channel.getId() %>)"/>
                 </li>
                 <%
                         }
@@ -201,6 +201,24 @@
 //        new ajax.xhr.Request("getMessages.jsp", params, ?, "GET", this);
 //    }
 
+    function quitChat(channelId) {
+        var httpReq = getInstance();
+
+        var params = "channelId=" + channelId;
+
+        if (httpReq) {
+            httpReq.open("POST", 'out.jsp');
+            httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            httpReq.onreadystatechange = function () {
+                if (httpReq.readyState == 4 && httpReq.status == 200) {
+                    alert(httpReq.responseText);
+                }
+            }
+
+            httpReq.send(params);
+        }
+    }
+
     function getInstance() {
         var httpReq = false;
         if(window.ActiveXObject)
@@ -225,9 +243,7 @@
 
         var params = "text=" + text +  "&channelId=" + channelId + "&userId=" + userId;
 
-        alert(params);
         if (httpReq) {
-            //var obj = document.getElementById(divID);
             httpReq.open("POST", 'send.jsp');
             httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             httpReq.onreadystatechange = function () {
