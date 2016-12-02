@@ -46,20 +46,20 @@
                     <a href="#">Logout</a>
                 </div>
             </li>
-            <%--<li class="dropdown">--%>
-            <%--<a href="javascript:void(0)" class="dropbtn">Add</a>--%>
-            <%--<div class="dropdown-content" id="add-dropdown" style="right: 180px">--%>
-            <%--<form action="action_page.php" id="addForm">--%>
-            <%--<a>Chat Name:</a>--%>
-            <%--<input type="text" id="chat-name-textfield">--%>
-            <%--<br>--%>
-            <%--<a>Memebers:</a>--%>
-            <%--<input type="text" id="name-textfield">--%>
-            <%--<br><br>--%>
-            <%--<input type="submit" value="완료">--%>
-            <%--</form>--%>
-            <%--</div>--%>
-            <%--</li>--%>
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn" onclick="addFunction()">Add</a>
+                <div class="dropdown-content" id="add-dropdown" style="right: 180px">
+                    <form id="addForm">
+                        <a>Chat Name:</a>
+                        <input type="text" id="chat-name-textfield">
+                        <br>
+                        <a>Memebers:</a>
+                        <input type="text" id="name-textfield">
+                        <br><br>
+                        <input type="button" value="완료" onclick="insertChannel()">
+                    </form>
+                </div>
+            </li>
         </ul>
     </div>
 
@@ -98,7 +98,8 @@
                         <div class="users"><%= channel.getUserNames() %>
                         </div>
                     </div>
-                    <input type="image" class="quit-chat" src="images/x.png" onclick="quitChat(<%= channel.getId() %>)"/>
+                    <input type="image" class="quit-chat" src="images/x.png"
+                           onclick="quitChat(<%= channel.getId() %>)"/>
                 </li>
                 <%
                         }
@@ -194,12 +195,38 @@
 </div>
 
 <script>
-//    function onChannelSelected(channelId) {
+    //    function onChannelSelected(channelId) {
     //  new ajax.xhr.Request("sendMessage.jsp", params,
-       // this.messageSended, "POST", this);
-//        var params = "channel_id=" + encodeURIComponent(channelId);
-//        new ajax.xhr.Request("getMessages.jsp", params, ?, "GET", this);
-//    }
+    // this.messageSended, "POST", this);
+    //        var params = "channel_id=" + encodeURIComponent(channelId);
+    //        new ajax.xhr.Request("getMessages.jsp", params, ?, "GET", this);
+    //    }
+
+    function insertChannel() {
+        var httpReq = getInstance();
+
+        var channelName = document.getElementById("chat-name-textfield").value;
+        var userNicknames = document.getElementById("name-textfield").value;
+
+
+        var params = "channelName=" + channelName + "&userNicknames=" + userNicknames;
+
+        if (httpReq) {
+            httpReq.open("POST", 'makeChannel.jsp');
+            httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            httpReq.onreadystatechange = function () {
+                if (httpReq.readyState == 4 && httpReq.status == 200) {
+                    alert(httpReq.responseText);
+                }
+            }
+
+            httpReq.send(params);
+        }
+    }
+
+    function addFunction() {
+        document.getElementById("add-dropdown").classList.toggle("show");
+    }
 
     function quitChat(channelId) {
         var httpReq = getInstance();
@@ -221,9 +248,9 @@
 
     function getInstance() {
         var httpReq = false;
-        if(window.ActiveXObject)
+        if (window.ActiveXObject)
             httpReq = new ActiveXOjbect("Microsoft.XMLHTTP");
-        else if(window.XMLHttpRequest)
+        else if (window.XMLHttpRequest)
             httpReq = new XMLHttpRequest();
         return httpReq;
     }
@@ -241,7 +268,7 @@
         var channelId = document.getElementById("channelId").value; //long type
         var userId = "h";
 
-        var params = "text=" + text +  "&channelId=" + channelId + "&userId=" + userId;
+        var params = "text=" + text + "&channelId=" + channelId + "&userId=" + userId;
 
         if (httpReq) {
             httpReq.open("POST", 'send.jsp');
