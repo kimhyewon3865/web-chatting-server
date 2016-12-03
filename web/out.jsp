@@ -15,13 +15,14 @@
 </head>
 <body>
 <%
+    String myNickname = "a";
+
     String channelId = request.getParameter("channelId");
 
     String url = "jdbc:mysql://localhost:3306/chatting";
     Connection conn = DriverManager.getConnection(url, "root", "dltmf1995");
     Statement stmt = conn.createStatement();
-    String sql = "DELETE FROM channels WHERE id = " + Integer.parseInt(channelId);
-    out.println(sql);
+    String sql = "DELETE FROM users_channels WHERE channel_id = " + Integer.parseInt(channelId) + " AND user_nickname='"+ myNickname + "'";
     stmt.executeUpdate(sql);
 %>
 </body>
