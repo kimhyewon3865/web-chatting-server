@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="css/style.css">
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js'></script>
+    <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
     <script src="js/chatting_room.js"></script>
 </head>
 <body>
@@ -90,11 +91,11 @@
                 %>
                 <li id=<%= channel.getId() %>>
                     <img width="50" height="50"
-                         src=<%= channel.getImageUrl() %>>
-                    <div class="info">
+                         src=<%= channel.getImageUrl() %> id="profile-image">
+                    <div class="info" id="channelListDiv">
                         <div id="chatting-room-name" class="chatting-room-name"><%= channel.getName() %>
                         </div>
-                        <div class="users"><%= channel.getUserNames(stmt) %>
+                        <div id="chatting-room-users" class="users"><%= channel.getUserNames(stmt) %>
                         </div>
                     </div>
                     <input type="image" class="quit-chat" src="images/x.png"
@@ -221,40 +222,6 @@
         document.getElementById("add-dropdown").classList.toggle("show");
     }
 
-//    function response_parse(data) {
-////            alert(data);
-//
-////            var $xml = $(data.responseText);
-////
-////            alert($xml.find("name").text());
-////
-//////            $("title").text($xml.find("totalCount").text() + " : " + $xml.find("dataTime").text());
-////
-//
-//
-//        var xml = $(data);
-//        var list = xml.find("channel");
-//        var content = "";
-//
-//        $.each(list, function (idx, item) {
-//            var oitem = $(item);
-//            var v_title = oitem.find("id").text();
-//            var v_author = oitem.find("name").text();
-//            var v_desc = oitem.find("image").text();
-//            var v_link = oitem.find("users").text();
-//
-//            content += "<br />제목 : " + v_title;
-//
-//        });
-//
-//        alert(content);
-//    }
-//
-//    function error(xml) {
-//        alert("error >> \n" + xml.responseText);
-////            alert(xml.toString());
-//    }
-
     function quitChat(channelId) {
         var httpReq = getInstance();
 
@@ -263,10 +230,10 @@
         if (httpReq) {
             httpReq.open("POST", 'out.jsp');
             httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            
+
             httpReq.onreadystatechange = function () {
                 if (httpReq.readyState == 4 && httpReq.status == 200) {
-                    alert(httpReq.responseText);
+                    //alert(httpReq.responseText);
                 }
 
             }
@@ -276,52 +243,49 @@
         loadChannels();
 
     }
-    
-    
+
+
     function loadChannels() {
-        httpReq = getInstance();
+        var httpReq = getInstance();
 
         httpReq.open("GET", "getChattingList.jsp", true);
         httpReq.onreadystatechange = function () {
             if (httpReq.readyState == 4 && httpReq.status == 200) {
-                //var xmlDocument;
-                    if (window.ActiveXObject) {   //IE일 경우
-                        xmlDocument = new ActiveXObject('Microsoft.XMLDOM');
-                        xmlDocument.async = false;
-                        xmlDocument.loadXML(httpReq.responseText);
-                    } else if (window.XMLHttpRequest) {   //Firefox, Netscape일 경우
-                        var xmlParser = new DOMParser();
-                        xmlDocument = xmlParser.parseFromString(httpReq.responseText, 'text/xml');
-                    } else {
-                        return null;
-                    }
+                var xmlDocument;
+                if (window.ActiveXObject) {   //IE일 경우
+                    xmlDocument = new ActiveXObject('Microsoft.XMLDOM');
+                    xmlDocument.async = false;
+                    xmlDocument.loadXML(httpReq.responseText);
+                } else if (window.XMLHttpRequest) {   //Firefox, Netscape일 경우
+                    var xmlParser = new DOMParser();
+                    xmlDocument = xmlParser.parseFromString(httpReq.responseText, 'text/xml');
 
+                } else {
+                    return null;
+                }
 
-                    var personList = xmlDocument.getElementsByTagName("channel")[0];
-                    var person = personList.childNodes[0];
+                var i;
+                var channels = xmlDocument.getElementsByTagName("channel");
+                var channalList = document.getElementById("list-friends");
 
-                    //var person;
-                    var writeStr = "";
-                    var i;
+                var lis = $("#list-friends").children();
+                for (i = 0; i < lis.length; i++) {
+                    lis[i].remove();
+                }
 
-                    for (i = 0; i < personList.childNodes.length; i++) {
-                        person = personList.childNodes[i];
-                        alert(person.getElementById("id"));
-
-
-//                        alert(person.getElementsByTagName("id")[0]);
-
-//                        writeStr += person.getElementsByTagName("id")[0].childNodes[0].nodeValue + " | ";
-//                        writeStr += person.getElementsByTagName("name")[0].childNodes[0].nodeValue + " | ";
-                    }
-                   // alert("writeStr >>" + writeStr);
-                    //document.getElementById('chatting-room-name').innerHTML = writeStr;
+                for (i = 0; i < channels.length; i++) {
+                    var channel = channels[i];
+                    var id = channel.getAttribute("id");
+                    var name = channel.getAttribute("name");
+                    var image = channel.getAttribute("image");
+                    var users = channel.getAttribute("users");
+                    var markup = "<li id=\"" + id + "\"><img width=\"50\" height=\"50\" src=\"" + image + "\" id=\"profile-image\"><div class=\"info\" id=\"channelListDiv\"><div id=\"chatting-room-name\" class=\"chatting-room-name\">" + name + "</div><div id=\"chatting-room-users\" class=\"users\">" + users + "</div></div><input type=\"image\" class=\"quit-chat\" src=\"images/x.png\" onclick=\"quitChat(" + id + ")\" id=\"quitButton\"/></li>";
+                    document.getElementById("list-friends").innerHTML += markup;
+                }
             }
-
         };
         httpReq.send();
     }
-
 
 
     function getInstance() {
