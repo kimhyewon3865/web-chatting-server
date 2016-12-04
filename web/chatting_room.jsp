@@ -299,8 +299,47 @@
 
     function loadMessages(channelId) {
 
-        var params = "channelId=" + channelId;
-        new ajax.xhr.Request("loadMessage.jsp", params, this.loadedMessage, "POST", this);
+        var httpReq = getInstance();
+
+        httpReq.open("GET", "getMessageList.jsp", true);
+        httpReq.onreadystatechange = function () {
+            if (httpReq.readyState == 4 && httpReq.status == 200) {
+                var xmlDocument;
+                if (window.ActiveXObject) {   //IE일 경우
+                    xmlDocument = new ActiveXObject('Microsoft.XMLDOM');
+                    xmlDocument.async = false;
+                    xmlDocument.loadXML(httpReq.responseText);
+                } else if (window.XMLHttpRequest) {   //Firefox, Netscape일 경우
+                    var xmlParser = new DOMParser();
+                    xmlDocument = xmlParser.parseFromString(httpReq.responseText, 'text/xml');
+
+                } else {
+                    return null;
+                }
+
+                var i;
+                var channels = xmlDocument.getElementsByTagName("channel");
+                var channalList = document.getElementById("list-friends");
+
+                var lis = $("#list-friends").children();
+                for (i = 0; i < lis.length; i++) {
+                    lis[i].remove();
+                }
+
+                for (i = 0; i < channels.length; i++) {
+                    var channel = channels[i];
+                    var id = channel.getAttribute("id");
+                    var name = channel.getAttribute("name");
+                    var image = channel.getAttribute("image");
+                    var users = channel.getAttribute("users");
+                    var markup = "<li id=\"" + id + "\"><img width=\"50\" height=\"50\" src=\"" + image + "\" id=\"profile-image\"><div class=\"info\" id=\"channelListDiv\"><div id=\"chatting-room-name\" class=\"chatting-room-name\">" + name + "</div><div id=\"chatting-room-users\" class=\"users\">" + users + "</div></div><input type=\"image\" class=\"quit-chat\" src=\"images/x.png\" onclick=\"quitChat(" + id + ")\" id=\"quitButton\"/></li>";
+                    document.getElementById("list-friends").innerHTML += markup;
+                }
+            }
+        };
+        httpReq.send();
+
+
     }
 
     function insertMessage() {

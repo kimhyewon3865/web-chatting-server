@@ -1,4 +1,6 @@
-<%--
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.DriverManager" %><%--
   Created by IntelliJ IDEA.
   User: kimhyewon
   Date: 2016. 12. 4.
@@ -8,7 +10,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+   <%
+       String url = "jdbc:mysql://localhost:3306/chatting";
+       Connection conn = DriverManager.getConnection(url, "root", "dltmf1995");
+       Statement stmt = conn.createStatement();
+
+   %>
 </head>
 <body>
 
