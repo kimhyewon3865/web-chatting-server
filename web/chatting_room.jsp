@@ -26,7 +26,7 @@
 </head>
 <body>
 <%
-    String myNickname = "a";
+    String myNickname = "b";
     long nowChannelId = 1;
 %>
 <div class="screenui">
@@ -297,7 +297,7 @@
         return httpReq;
     }
 
-    function loadMessage(channelId) {
+    function loadMessages(channelId) {
 
         var params = "channelId=" + channelId;
         new ajax.xhr.Request("loadMessage.jsp", params, this.loadedMessage, "POST", this);
@@ -324,6 +324,7 @@
             httpReq.send(params);
         }
     }
+
 
 
 </script>

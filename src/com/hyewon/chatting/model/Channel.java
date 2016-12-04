@@ -98,7 +98,7 @@ public class Channel {
 
 	public static List<Channel> findAll(Statement statement) throws SQLException { // TODO: DB에 연결해서 구현해야함
 		List<Channel> channels = new ArrayList<>();
-		String myNickname = "a";
+		String myNickname = "b";
 		String sql = "SELECT * FROM channels where id in (select users_channels.channel_id from users_channels where users_channels.user_nickname = '" + myNickname + "');";
 
 		ResultSet resultSet = statement.executeQuery(sql);

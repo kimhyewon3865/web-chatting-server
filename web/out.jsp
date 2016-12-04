@@ -15,7 +15,7 @@
 </head>
 <body>
 <%
-    String myNickname = "a";
+    String myNickname = "b";
 
     String channelId = request.getParameter("channelId");
 
