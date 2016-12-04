@@ -26,7 +26,6 @@
 </head>
 <body>
 <%
-    String myNickname = "b";
     long nowChannelId = 1;
 %>
 <div class="screenui">
@@ -116,41 +115,42 @@
 
 
         <div class="chat" id="chat">
-            <ul class="messages">
-                <% List<Message> messages = Message.findAll(null);
-                    for (Message message : messages) {
-                        if (!message.getUserId().equals(myNickname)) {
-                %>
+            <ul class="messages" id="list-messages">
+                <%--<% List<Message> messages = Message.findAll(null);--%>
+                    <%--for (Message message : messages) {--%>
+                        <%--if (!message.getUserNickname().equals(myNickname)) {--%>
+                <%--%>--%>
 
-                <li class="friend-with-a-SVAGina">
-                    <div class="head">
-                        <span class="name"><%=message.getUserId()%></span>
-                        <span class="time"><%=message.getCreateAt()%></span>
-                    </div>
-                    <div>
-                        <div class="message"><%=message.getText()%>
-                        </div>
-                        <input type="image" class="friendButton"
-                               src="images/star_unselected.png"
-                               starred="false"/>
-                    </div>
-                </li>
-                <% } else {%>
-                <li class="i">
-                    <div class="head">
-                        <span class="name"><%=message.getUserId()%></span>
-                        <span class="time"><%=message.getCreateAt()%></span>
-                    </div>
-                    <div>
-                        <div class="message"><%=message.getText()%>
-                        </div>
-                        <input type="image" class="iButton" src="images/star_unselected.png"
-                               starred="false"/>
-                    </div>
-                </li>
+                <%--<li class="friend-with-a-SVAGina">--%>
+                    <%--<div class="head">--%>
+                        <%--<span class="name"><%=message.getUserNickname()%></span>--%>
+                        <%--<span class="time"><%=message.getCreateAt()%></span>--%>
+                    <%--</div>--%>
+                    <%--<div>--%>
+                        <%--<div class="message"><%=message.getText()%>--%>
+                        <%--</div>--%>
+                        <%--<input type="image" class="friendButton"--%>
+                               <%--src="images/star_unselected.png"--%>
+                               <%--starred="false"/>--%>
+                    <%--</div>--%>
+                <%--</li>--%>
+                <%--<% } else {%>--%>
+                <%--<li class="i">--%>
+                    <%--<div class="head">--%>
+                        <%--<span class="name"><%=message.getUserNickname()%></span>--%>
+                        <%--<span class="time"><%=message.getCreateAt()%></span>--%>
+                    <%--</div>--%>
+                    <%--<div>--%>
+                        <%--<div class="message"><%=message.getText()%>--%>
+                        <%--</div>--%>
+                        <%--<input type="image" class="iButton" src="images/star_unselected.png"--%>
+                               <%--starred="false"/>--%>
+                    <%--</div>--%>
+                <%--</li>--%>
 
-                <% }
-                } %>
+                <%--<% }--%>
+                <%--}--%>
+                <%--%>--%>
             </ul>
 
             <%--<div class="write-form">--%>
@@ -196,6 +196,8 @@
 </div>
 
 <script>
+    var myNickname = "b"; // TODO: b 대신 로그인한 유저 닉네임을 설정
+
     function insertChannel() {
         var httpReq = getInstance();
 
@@ -212,7 +214,7 @@
                 if (httpReq.readyState == 4 && httpReq.status == 200) {
                     alert(httpReq.responseText);
                 }
-            }
+            };
 
             httpReq.send(params);
         }
@@ -247,11 +249,7 @@
 
     function loadChannels() {
         var httpReq = getInstance();
-        c
-        httpReq.open("GET", "getChattingList.jsp?userNickname=" + "", true); // TODO: b 대신 로그인한 유저 닉네임을 설정
-
-
-
+        httpReq.open("GET", "getChattingList.jsp?userNickname=" + myNickname, true);
         httpReq.onreadystatechange = function () {
             if (httpReq.readyState == 4 && httpReq.status == 200) {
                 var xmlDocument;
@@ -269,7 +267,6 @@
 
                 var i;
                 var channels = xmlDocument.getElementsByTagName("channel");
-                var channalList = document.getElementById("list-friends");
 
                 var lis = $("#list-friends").children();
                 for (i = 0; i < lis.length; i++) {
@@ -301,10 +298,11 @@
     }
 
     function loadMessages(channelId) {
-
         var httpReq = getInstance();
+        var url = "getMessageList.jsp?channelId=" + channelId;
+        // TODO: 마지막 메시지의 createdAt을 받아와서 url의 파라미터로 설정해야함
 
-        httpReq.open("GET", "getMessageList.jsp", true);
+        httpReq.open("GET", url, true);
         httpReq.onreadystatechange = function () {
             if (httpReq.readyState == 4 && httpReq.status == 200) {
                 var xmlDocument;
@@ -321,22 +319,33 @@
                 }
 
                 var i;
-                var channels = xmlDocument.getElementsByTagName("channel");
-                var channalList = document.getElementById("list-friends");
+                var messages = xmlDocument.getElementsByTagName("message");
 
-                var lis = $("#list-friends").children();
-                for (i = 0; i < lis.length; i++) {
-                    lis[i].remove();
-                }
+//                var lis = $("#list-messages").children();
+//                for (i = 0; i < lis.length; i++) {
+//                    lis[i].remove();
+//                }
 
-                for (i = 0; i < channels.length; i++) {
-                    var channel = channels[i];
-                    var id = channel.getAttribute("id");
-                    var name = channel.getAttribute("name");
-                    var image = channel.getAttribute("image");
-                    var users = channel.getAttribute("users");
-                    var markup = "<li id=\"" + id + "\"><img width=\"50\" height=\"50\" src=\"" + image + "\" id=\"profile-image\"><div class=\"info\" id=\"channelListDiv\"><div id=\"chatting-room-name\" class=\"chatting-room-name\">" + name + "</div><div id=\"chatting-room-users\" class=\"users\">" + users + "</div></div><input type=\"image\" class=\"quit-chat\" src=\"images/x.png\" onclick=\"quitChat(" + id + ")\" id=\"quitButton\"/></li>";
-                    document.getElementById("list-friends").innerHTML += markup;
+                for (i = 0; i < messages.length; i++) {
+                    var message = messages[i];
+
+                    var id = message.getAttribute("id");
+                    var text = message.getAttribute("text");
+                    var starred = message.getAttribute("starred");
+                    var createdAt = message.getAttribute("createdAt");
+                    var channelId = message.getAttribute("channelId");
+                    var userNickname = message.getAttribute("userNickname");
+                    var src = (starred ? "images/star_selected.png" : "images/star_unselected.png")
+
+                    var markup;
+
+                    if (myNickname == userNickname) {
+                        markup = "<li class=\"i\"><div class=\"head\"><span class=\"name\">" + userNickname+ "</span><span class=\"time\">" + createdAt + "</span></div><div><div class=\"message\">" + text + "</div><input type=\"image\" class=\"iButton\" src=\"" + src + "\" starred=\"" + starred + "\"/></div></li>";
+                    } else {
+                        markup = "<li class=\"friend-with-a-SVAGina\"><div class=\"head\"><span class=\"name\">" + userNickname+ "</span><span class=\"time\">" + createdAt + "</span></div><div><div class=\"message\">" + text + "</div><input type=\"image\" class=\"friendButton\" src=\"" + src + "\" starred=\"" + starred + "\"/></div></li>";
+                    }
+
+                    document.getElementById("list-messages").innerHTML += markup;
                 }
             }
         };
@@ -350,9 +359,9 @@
 
         var text = document.getElementById("text").value;
         var channelId = document.getElementById("channelId").value; //long type
-        var userId = "h";
+        var userNickname = "h";
 
-        var params = "text=" + text + "&channelId=" + channelId + "&userId=" + userId;
+        var params = "text=" + text + "&channelId=" + channelId + "&userNickname=" + userNickname;
 
         if (httpReq) {
             httpReq.open("POST", 'send.jsp');
