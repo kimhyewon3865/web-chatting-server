@@ -14,12 +14,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>--%>
-<html>
+
 <head>
     <title>채팅방</title>
     <%--<link href="<c:url value="/res/css/main.css" />" rel="stylesheet">--%>
     <link rel="stylesheet" href="css/style.css">
-
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js'></script>
     <script src="js/chatting_room.js"></script>
@@ -93,13 +92,14 @@
                     <img width="50" height="50"
                          src=<%= channel.getImageUrl() %>>
                     <div class="info">
-                        <div class="chatting-room-name"><%= channel.getName() %>
+                        <div id="chatting-room-name" class="chatting-room-name"><%= channel.getName() %>
                         </div>
-                        <div class="users"><%= channel.getUserNames() %>
+                        <div class="users"><%= channel.getUserNames(stmt) %>
                         </div>
                     </div>
                     <input type="image" class="quit-chat" src="images/x.png"
-                           onclick="quitChat(<%= channel.getId() %>)"/>
+                           onclick="quitChat(<%= channel.getId() %>)" id="quitButton"/>
+
                 </li>
                 <%
                         }
@@ -195,170 +195,171 @@
 </div>
 
 <script>
-    //    function onChannelSelected(channelId) {
-    //  new ajax.xhr.Request("sendMessage.jsp", params,
-    // this.messageSended, "POST", this);
-    //        var params = "channel_id=" + encodeURIComponent(channelId);
-    //        new ajax.xhr.Request("getMessages.jsp", params, ?, "GET", this);
-    //    }
+    function insertChannel() {
+        var httpReq = getInstance();
 
-        function insertChannel() {
-            var httpReq = getInstance();
-
-            var channelName = document.getElementById("chat-name-textfield").value;
-            var userNicknames = document.getElementById("name-textfield").value;
+        var channelName = document.getElementById("chat-name-textfield").value;
+        var userNicknames = document.getElementById("name-textfield").value;
 
 
-            var params = "channelName=" + channelName + "&userNicknames=" + userNicknames;
+        var params = "channelName=" + channelName + "&userNicknames=" + userNicknames;
 
-            if (httpReq) {
-                httpReq.open("POST", 'makeChannel.jsp');
-                httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                httpReq.onreadystatechange = function () {
-                    if (httpReq.readyState == 4 && httpReq.status == 200) {
-                        alert(httpReq.responseText);
-                    }
+        if (httpReq) {
+            httpReq.open("POST", 'makeChannel.jsp');
+            httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            httpReq.onreadystatechange = function () {
+                if (httpReq.readyState == 4 && httpReq.status == 200) {
+                    alert(httpReq.responseText);
+                }
+            }
+
+            httpReq.send(params);
+        }
+    }
+
+    function addFunction() {
+        document.getElementById("add-dropdown").classList.toggle("show");
+    }
+
+//    function response_parse(data) {
+////            alert(data);
+//
+////            var $xml = $(data.responseText);
+////
+////            alert($xml.find("name").text());
+////
+//////            $("title").text($xml.find("totalCount").text() + " : " + $xml.find("dataTime").text());
+////
+//
+//
+//        var xml = $(data);
+//        var list = xml.find("channel");
+//        var content = "";
+//
+//        $.each(list, function (idx, item) {
+//            var oitem = $(item);
+//            var v_title = oitem.find("id").text();
+//            var v_author = oitem.find("name").text();
+//            var v_desc = oitem.find("image").text();
+//            var v_link = oitem.find("users").text();
+//
+//            content += "<br />제목 : " + v_title;
+//
+//        });
+//
+//        alert(content);
+//    }
+//
+//    function error(xml) {
+//        alert("error >> \n" + xml.responseText);
+////            alert(xml.toString());
+//    }
+
+    function quitChat(channelId) {
+        var httpReq = getInstance();
+
+        var params = "channelId=" + channelId;
+
+        if (httpReq) {
+            httpReq.open("POST", 'out.jsp');
+            httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            
+            httpReq.onreadystatechange = function () {
+                if (httpReq.readyState == 4 && httpReq.status == 200) {
+                    alert(httpReq.responseText);
                 }
 
-                httpReq.send(params);
             }
         }
 
-        function addFunction() {
-            document.getElementById("add-dropdown").classList.toggle("show");
-        }
+        httpReq.send(params);
+        loadChannels();
 
-        function quitChat(channelId) {
-            var httpReq = getInstance();
+    }
+    
+    
+    function loadChannels() {
+        httpReq = getInstance();
 
-            var params = "channelId=" + channelId;
-
-            if (httpReq) {
-                httpReq.open("POST", 'out.jsp');
-                httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                httpReq.onreadystatechange = function () {
-                    if (httpReq.readyState == 4 && httpReq.status == 200) {
-                        alert(httpReq.responseText);
+        httpReq.open("GET", "getChattingList.jsp", true);
+        httpReq.onreadystatechange = function () {
+            if (httpReq.readyState == 4 && httpReq.status == 200) {
+                //var xmlDocument;
+                    if (window.ActiveXObject) {   //IE일 경우
+                        xmlDocument = new ActiveXObject('Microsoft.XMLDOM');
+                        xmlDocument.async = false;
+                        xmlDocument.loadXML(httpReq.responseText);
+                    } else if (window.XMLHttpRequest) {   //Firefox, Netscape일 경우
+                        var xmlParser = new DOMParser();
+                        xmlDocument = xmlParser.parseFromString(httpReq.responseText, 'text/xml');
+                    } else {
+                        return null;
                     }
-                }
-
-                httpReq.send(params);
 
 
-                //getChattinRommList
-//                httpReq.open("GET", "getChattingList.jsp");
-//
-//                httpReq.onreadystatechange = function () {
-//                    if (httpReq.readyState == 4 && httpReq.status == 200) {
-//                        alert(httpReq.responseText);
-//
-//                        var xmlDocument;
-//                        if (window.ActiveXObject) {   //IEÀÏ °æ¿ì
-//                            xmlDocument = new ActiveXObject('Microsoft.XMLDOM');
-//                            xmlDocument.async = false;
-//                            xmlDocument.loadXML(httpReq.responseText);
-//                        } else if (window.XMLHttpRequest) {   //Firefox, NetscapeÀÏ °æ¿ì
-//                            xmlParser = new DOMParser();
-//                            xmlDocument = xmlParser.parseFromString(httpReq.responseText, 'text/xml');
-//                        } else {
-//                            return null;
-//                        }
-////
-//                        var nameTag = xmlDocument.getElementsByTagName("name");
-//                        var nametxt = nameTag[0].childNodes[0].nodeValue;
-//                        alert(nametxt);
-////                        window.onload = function() {
-////                            document.getElementById("chatting-room-name").innerHTML = "사랑";
-////                            alert(document.getElementById("chatting-room-name").value);
-////                        }
-//
-//
-////                    var channelList = xmlDocument.getElementsByTagName("channel")[0];
-////                    alert(channelList);
-////
-////                    var channel = channelList.childNodes[0]
-////
-////                    var channelTable = document.getElementById("list-friends");
-//
-//
-////                    for (var i = 0; i < channelList.childNodes.length; i++) {
-////                        channel = channelList.childNodes[i];
-////
-////                        var menuElement = document.createElement("menu");
-////
-////                        var liElement = document.createElement("li");
-////                        var imgElement = document.createElement("img");
-////                        var divElement = document.createElement("div");
-////
-////                        var channelNameElement = document.createElement("div");
-////                       // var usersNameElement = document.createElement("div");
-////
-////                        var inputElement = document.createElement("input");
-////                        var imgTextElement = document.createTextNode(channel.getElementsByTagName("image")[0].childNodes[0].nodeValue);
-////                        var nameTextElement = document.createTextNode(channel.getElementsByTagName("name")[0].childNodes[0].nodeValue);
-////                       // var usersTextElement = document.createTextNode(channel.getElementsByTagName("users")[0].childNodes[0].nodeValue);
-////
-////                        imgElement.appendChild(imgTextElement);
-////                        channelNameElement.appendChild(nameTextElement);
-////                     //   usersNameElement.appendChild(usersTextElement);
-////
-////                        menuElement.appendChild(liElement);
-////                        liElement.appendChild(imgElement);
-////                        liElement.appendChild(divElement);
-////                        liElement.appendChild(inputElement);
-////                        divElement.appendChild(channelNameElement);
-////                     //   divElement.appendChild(usersNameElement);
-////
-////                        channelTable.appendChild(menuElement);
-////
-////
-////                    }
-//
-//                    }
-//                }
-//                httpReq.send(null);
+                    var personList = xmlDocument.getElementsByTagName("channel")[0];
+                    var person = personList.childNodes[0];
+
+                    //var person;
+                    var writeStr = "";
+                    var i;
+
+                    for (i = 0; i < personList.childNodes.length; i++) {
+                        person = personList.childNodes[i];
+                        alert(person.getElementById("id"));
+
+
+//                        alert(person.getElementsByTagName("id")[0]);
+
+//                        writeStr += person.getElementsByTagName("id")[0].childNodes[0].nodeValue + " | ";
+//                        writeStr += person.getElementsByTagName("name")[0].childNodes[0].nodeValue + " | ";
+                    }
+                   // alert("writeStr >>" + writeStr);
+                    //document.getElementById('chatting-room-name').innerHTML = writeStr;
             }
 
+        };
+        httpReq.send();
+    }
 
-        }
 
-        function getInstance() {
-            var httpReq = false;
-            if (window.ActiveXObject)
-                httpReq = new ActiveXOjbect("Microsoft.XMLHTTP");
-            else if (window.XMLHttpRequest)
-                httpReq = new XMLHttpRequest();
-            return httpReq;
-        }
 
-        function loadMessage(channelId) {
+    function getInstance() {
+        var httpReq = false;
+        if (window.ActiveXObject)
+            httpReq = new ActiveXOjbect("Microsoft.XMLHTTP");
+        else if (window.XMLHttpRequest)
+            httpReq = new XMLHttpRequest();
+        return httpReq;
+    }
 
-            var params = "channelId=" + channelId;
-            new ajax.xhr.Request("loadMessage.jsp", params, this.loadedMessage, "POST", this);
-        }
+    function loadMessage(channelId) {
 
-        function insertMessage() {
-            var httpReq = getInstance();
+        var params = "channelId=" + channelId;
+        new ajax.xhr.Request("loadMessage.jsp", params, this.loadedMessage, "POST", this);
+    }
 
-            var text = document.getElementById("text").value;
-            var channelId = document.getElementById("channelId").value; //long type
-            var userId = "h";
+    function insertMessage() {
+        var httpReq = getInstance();
 
-            var params = "text=" + text + "&channelId=" + channelId + "&userId=" + userId;
+        var text = document.getElementById("text").value;
+        var channelId = document.getElementById("channelId").value; //long type
+        var userId = "h";
 
-            if (httpReq) {
-                httpReq.open("POST", 'send.jsp');
-                httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                httpReq.onreadystatechange = function () {
-                    if (httpReq.readyState == 4 && httpReq.status == 200) {
-                        alert(httpReq.responseText);
-                    }
+        var params = "text=" + text + "&channelId=" + channelId + "&userId=" + userId;
+
+        if (httpReq) {
+            httpReq.open("POST", 'send.jsp');
+            httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            httpReq.onreadystatechange = function () {
+                if (httpReq.readyState == 4 && httpReq.status == 200) {
+                    alert(httpReq.responseText);
                 }
-
-                httpReq.send(params);
             }
-        }
 
+            httpReq.send(params);
+        }
+    }
 
 
 </script>

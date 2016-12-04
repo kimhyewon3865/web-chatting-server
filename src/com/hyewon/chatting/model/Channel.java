@@ -51,18 +51,33 @@ public class Channel {
 
 	// Util
 
-	public String getUserNames() {
+	public String getUserNames(Statement statement) throws SQLException {
 		StringBuilder builder = new StringBuilder();
-		List<User> users = getUsers();
+		ResultSet resultSet = statement.executeQuery("SELECT user_nickname FROM users_channels WHERE channel_id=" + id + ";");
 
-		for (int i = 0; i < users.size(); i++) {
-			User user = users.get(i);
-			builder.append(user.nickName);
-			if (i < users.size() - 1)
-				builder.append(", ");
+		while (resultSet.next()) {
+			builder.append(resultSet.getString("user_nickname"));
+			if (!resultSet.isLast()) {
+//				builder.append(", ");
+				builder.append(" ");
+			}
 		}
 
+		resultSet.close();
 		return builder.toString();
+
+
+//		StringBuilder builder = new StringBuilder();
+//		List<User> users = getUsers();
+//
+//		for (int i = 0; i < users.size(); i++) {
+//			User user = users.get(i);
+//			builder.append(user.nickName);
+//			if (i < users.size() - 1)
+//				builder.append(", ");
+//		}
+//
+//		return builder.toString();
 	}
 
 	// Database Methods
@@ -86,6 +101,17 @@ public class Channel {
 		String myNickname = "a";
 		String sql = "SELECT * FROM channels where id in (select users_channels.channel_id from users_channels where users_channels.user_nickname = '" + myNickname + "');";
 
+		ResultSet resultSet = statement.executeQuery(sql);
+		while (resultSet.next()) {
+			channels.add(convertResultSetToChannel(resultSet));
+		}
+		resultSet.close();
+		return channels;
+	}
+
+	public static List<Channel> findByUserNickname(Statement statement, String userNickname) throws SQLException {
+		List<Channel> channels = new ArrayList<>();
+		String sql = "SELECT * FROM channels where id in (select users_channels.channel_id from users_channels where users_channels.user_nickname = '" + userNickname + "');";
 		ResultSet resultSet = statement.executeQuery(sql);
 		while (resultSet.next()) {
 			channels.add(convertResultSetToChannel(resultSet));
