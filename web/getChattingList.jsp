@@ -15,7 +15,7 @@
     String url = "jdbc:mysql://localhost:3306/chatting";
     Connection conn = DriverManager.getConnection(url, "root", "dltmf1995");
     Statement stmt = conn.createStatement();
-    List<Channel> channels = Channel.findAll(stmt);
+    List<Channel> channels = Channel.findByUserNickname(stmt, request.getParameter("userNickname"));
     for (Channel channel : channels) {
 %>
     <channel

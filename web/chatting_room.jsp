@@ -247,8 +247,11 @@
 
     function loadChannels() {
         var httpReq = getInstance();
+        c
+        httpReq.open("GET", "getChattingList.jsp?userNickname=" + "", true); // TODO: b 대신 로그인한 유저 닉네임을 설정
 
-        httpReq.open("GET", "getChattingList.jsp", true);
+
+
         httpReq.onreadystatechange = function () {
             if (httpReq.readyState == 4 && httpReq.status == 200) {
                 var xmlDocument;
