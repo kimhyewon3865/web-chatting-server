@@ -75,7 +75,8 @@ public class Message {
         List<Message> messages = new ArrayList<>();
         ResultSet resultSet;
         if (0 < createdAt) {
-            resultSet = statement.executeQuery("SELECT * FROM messages WHERE channel_id=" + channelId + "AND created_at > " + createdAt + ";");
+            resultSet = statement.executeQuery("SELECT * FROM messages WHERE channel_id="+channelId+" AND create_at >"+createdAt+";");
+
         } else {
             resultSet = statement.executeQuery("SELECT * FROM messages WHERE channel_id=" + channelId + ";");
         }

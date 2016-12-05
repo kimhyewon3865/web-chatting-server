@@ -88,7 +88,7 @@
                         List<Channel> channels = Channel.findAll(stmt);
                         for (Channel channel : channels) {
                 %>
-                <li id=<%= channel.getId() %>>
+                <li onclick="setGlogalChannelId(<%=channel.getId()%>)" id=<%= channel.getId() %>>
                     <img width="50" height="50"
                          src=<%= channel.getImageUrl() %> id="profile-image">
                     <div class="info" id="channelListDiv">
@@ -197,6 +197,9 @@
 
 <script>
     var myNickname = "b"; // TODO: b 대신 로그인한 유저 닉네임을 설정
+    var globalChannelId = 18; // TODO: 가장상위의 채널 아이디 설정 SELECT MIN(channel_id) FROM chatting.users_channels WHERE user_nickname="b";
+    var globalLastCreatedAt = 0;
+    var clickNewChannelFlag = 0;// TODO: 새로운 채널 눌렀을때 기존 채팅 내용 remove
 
     function insertChannel() {
         var httpReq = getInstance();
@@ -279,7 +282,7 @@
                     var name = channel.getAttribute("name");
                     var image = channel.getAttribute("image");
                     var users = channel.getAttribute("users");
-                    var markup = "<li id=\"" + id + "\"><img width=\"50\" height=\"50\" src=\"" + image + "\" id=\"profile-image\"><div class=\"info\" id=\"channelListDiv\"><div id=\"chatting-room-name\" class=\"chatting-room-name\">" + name + "</div><div id=\"chatting-room-users\" class=\"users\">" + users + "</div></div><input type=\"image\" class=\"quit-chat\" src=\"images/x.png\" onclick=\"quitChat(" + id + ")\" id=\"quitButton\"/></li>";
+                    var markup = "<li onclick=\"setGlogalChannelId(" + id + ")\" id=\"" + id + "\"><img width=\"50\" height=\"50\" src=\"" + image + "\" id=\"profile-image\"><div class=\"info\" id=\"channelListDiv\"><div id=\"chatting-room-name\" class=\"chatting-room-name\">" + name + "</div><div id=\"chatting-room-users\" class=\"users\">" + users + "</div></div><input type=\"image\" class=\"quit-chat\" src=\"images/x.png\" onclick=\"quitChat(" + id + ")\" id=\"quitButton\"/></li>";
                     document.getElementById("list-friends").innerHTML += markup;
                 }
             }
@@ -297,9 +300,20 @@
         return httpReq;
     }
 
-    function loadMessages(channelId) {
+    setInterval(function loadMessages() {
+        if (clickNewChannelFlag) {
+
+            var lis = $("#list-messages").children();
+            for (i = 0; i < lis.length; i++) {
+                lis[i].remove();
+            }
+
+            clickNewChannelFlag = 0;
+            globalLastCreatedAt = 0;
+        }
+
         var httpReq = getInstance();
-        var url = "getMessageList.jsp?channelId=" + channelId;
+        var url = "getMessageList.jsp?channelId=" + globalChannelId + "&createdAt=" + globalLastCreatedAt;
         // TODO: 마지막 메시지의 createdAt을 받아와서 url의 파라미터로 설정해야함
 
         httpReq.open("GET", url, true);
@@ -318,6 +332,8 @@
                     return null;
                 }
 
+
+
                 var i;
                 var messages = xmlDocument.getElementsByTagName("message");
 
@@ -332,6 +348,8 @@
                     var userNickname = message.getAttribute("userNickname");
                     var src = (starred ? "images/star_selected.png" : "images/star_unselected.png")
 
+                    if(i == messages.length-1)
+                        globalLastCreatedAt = createdAt;
                     var markup;
 
                     if (myNickname == userNickname) {
@@ -345,16 +363,17 @@
             }
         };
         httpReq.send();
-    }
+    },1000);
 
     function insertMessage() {
         var httpReq = getInstance();
 
         var text = document.getElementById("text").value;
         var channelId = document.getElementById("channelId").value; //long type
-        var userNickname = "h";
+       // var userNickname = "h";
 
-        var params = "text=" + text + "&channelId=" + channelId + "&userNickname=" + userNickname;
+
+        var params = "text=" + text + "&channelId=" + globalChannelId + "&userNickname=" + myNickname;
 
         if (httpReq) {
             httpReq.open("POST", 'send.jsp');
@@ -367,8 +386,29 @@
 
             httpReq.send(params);
         }
+
+
     }
 
+    function setGlogalChannelId(nowChannelId) {
+        globalChannelId = nowChannelId;
+        clickNewChannelFlag = 1;
+
+        //            return false;
+        //loadMessages();
+    }
+
+    $(function () {
+        $("li").click(function () {
+            $("li").removeAttr("style");
+            $(this).css("background-color", "lightblue");
+        });
+//        $("li a").click(function () {
+//            $("li").removeAttr("style");
+//            $(this).closest("li").css("background-color", "lightblue");
+//            return false;
+//        });
+    });
 
 
 </script>
