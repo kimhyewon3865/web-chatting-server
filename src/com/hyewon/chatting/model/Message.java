@@ -91,8 +91,8 @@ public class Message {
         Message message = new Message();
         message.id = resultSet.getLong("id");
         message.text = resultSet.getString("text");
-        message.starred = resultSet.getBoolean("starred");
-        message.createdAt = resultSet.getLong("created_at");
+        message.starred = resultSet.getInt("starred") == 1;
+        message.createdAt = resultSet.getLong("create_at");
         message.channelId = resultSet.getLong("channel_id");
         message.userNickname = resultSet.getString("user_nickname");
         return message;

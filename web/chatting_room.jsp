@@ -321,11 +321,6 @@
                 var i;
                 var messages = xmlDocument.getElementsByTagName("message");
 
-//                var lis = $("#list-messages").children();
-//                for (i = 0; i < lis.length; i++) {
-//                    lis[i].remove();
-//                }
-
                 for (i = 0; i < messages.length; i++) {
                     var message = messages[i];
 
@@ -350,8 +345,6 @@
             }
         };
         httpReq.send();
-
-
     }
 
     function insertMessage() {
