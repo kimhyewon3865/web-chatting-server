@@ -450,3 +450,7 @@ body {
 .nav .show {
     display: block;
 }
+
+.nav .homeLeftFloat {
+    float: left;
+}
