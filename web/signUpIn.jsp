@@ -21,12 +21,12 @@
     <div class="tab-content">
         <div id="signup">
             <h3>Sign Up for Free</h3>
-            <form action="./chatting_room.jsp" method="post">
+            <form action="./signInCheck.jsp" method="post">
                 <div class="field-wrap">
                     <label>
                         nick Name<span class="req">*</span>
                     </label>
-                    <input type="text" required autocomplete="off" />
+                    <input type="text" required autocomplete="off" name="signUpNickName"/>
                 </div>
 
                 <div class="field-wrap">
@@ -35,24 +35,24 @@
                     </label>
                     <input type="password"required autocomplete="off"/>
                 </div>
-                <button type="submit" class="button button-block">Get Started</button>
+                <button type="submit" class="button button-block" onclick="signUpButton()">Get Started</button>
             </form>
         </div>
 
         <div id="login">
             <h3>Welcome Back!</h3>
-            <form action="./chatting_room.jsp" method="post">
+            <form action="./signInCheck.jsp" method="post">
                 <div class="field-wrap">
                     <label>
                         nick Name<span class="req">*</span>
                     </label>
-                    <input type="email"required autocomplete="off"/>
+                    <input type="text" required autocomplete="off" name="signInNickName"/>
                 </div>
                 <div class="field-wrap">
                     <label>
                         Password<span class="req">*</span>
                     </label>
-                    <input type="password"required autocomplete="off"/>
+                    <input type="password"required autocomplete="off" name="signInPassword"/>
                 </div>
                 <p class="forgot"><a href="#">Forgot Password?</a></p>
                 <button class="button button-block"/>Log In</button>
@@ -62,5 +62,10 @@
 </div> <!-- /form -->
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src="js/signUpIn.js"></script>
+<script>
+    function signUpButton() {
+        alert("");
+    }
+</script>
 </body>
 </html>
