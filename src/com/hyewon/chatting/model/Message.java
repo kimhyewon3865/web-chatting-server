@@ -3,7 +3,9 @@ package com.hyewon.chatting.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -54,7 +56,6 @@ public class Message {
         return text;
     }
 
-
     public Message setStarred(boolean starred) {
         this.starred = starred;
         return this;
@@ -69,6 +70,11 @@ public class Message {
     }
     public long getCreateAt() {
         return createdAt;
+    }
+
+    public String getCreateAtString() {
+        Date createAtDate = new Date(createdAt);
+        return new SimpleDateFormat("a hh:mm").format(createAtDate);
     }
 
     public static List<Message> findByChannelAndCreatedAt(Statement statement, long channelId, long createdAt) throws SQLException {

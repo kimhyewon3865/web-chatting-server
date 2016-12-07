@@ -6,10 +6,6 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
 
-<HTML>
-<head></head>
-
-<body>
 <%
     String text = request.getParameter("text");
     String channelId = request.getParameter("channelId"); //long type
@@ -25,19 +21,9 @@
         String sql = "insert into messages(text, starred, create_at, channel_id, user_nickname) values(" +
                 "'" + text + "', 0, " + createdAt + ", "+ channelId + ", '" + userNickname + "');";
         stmt.executeUpdate(sql);
-
         conn.close();
         stmt.close();
-%>
-<%= text %>
-<%
     } catch (SQLException e) {
         e.printStackTrace();
-%>
-<%= e.getMessage() %>
-<%
     }
 %>
-
-</body>
-</html>

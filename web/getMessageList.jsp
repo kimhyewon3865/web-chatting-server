@@ -26,6 +26,7 @@
             text="<%= message.getText() %>"
             starred="<%= message.getStarred() %>"
             createdAt="<%= message.getCreateAt() %>"
+            createdAtString="<%= message.getCreateAtString() %>"
             channelId="<%= message.getChannelId() %>"
             userNickname="<%= message.getUserNickname() %>"/>
     <%

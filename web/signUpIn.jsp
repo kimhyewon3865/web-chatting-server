@@ -35,7 +35,7 @@
                     </label>
                     <input type="password"required autocomplete="off"/>
                 </div>
-                <button type="submit" class="button button-block" onclick="signUpButton()">Get Started</button>
+                <button type="submit" class="button button-block">Get Started</button>
             </form>
         </div>
 
@@ -62,10 +62,5 @@
 </div> <!-- /form -->
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src="js/signUpIn.js"></script>
-<script>
-    function signUpButton() {
-        alert("");
-    }
-</script>
 </body>
 </html>

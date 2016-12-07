@@ -27,6 +27,7 @@
     String sql = "SELECT COUNT(*) as count FROM users where nickName=\""+ nickName +"\" and password=\"" + pwd + "\"; ";
     ResultSet resultSet =  stmt.executeQuery(sql);
     Integer count = 0;
+    Integer firstChannelId = 0;
     //Integer result = resultSet.getInt("count");
     //System.out.println("nic>>" + nickName + " pwd>>" + pwd + " result>>" +result);
 
@@ -34,13 +35,23 @@
         count = resultSet.getInt(1);
     }
 
-    System.out.println("nic>>" + nickName + " pwd>>" + pwd + " result>>" + count);
+    sql = "SELECT MIN(channel_id) FROM users_channels WHERE user_nickname=\""+ nickName +"\"";
+    resultSet =  stmt.executeQuery(sql);
+
+
+    if (resultSet.next()) {
+        firstChannelId = resultSet.getInt(1);
+    }
+
+    //System.out.println("nic>>" + nickName + " pwd>>" + pwd + " result>>" + count);
 
     // id, pwd가 맞을 경우 실행
     if(count == 1)
     {
         session.setAttribute("s_Id", nickName);
-        response.sendRedirect("./chatting_room.jsp"); // main.jsp 에 session 정보를 보낸다
+        session.setAttribute("s_channel", firstChannelId);
+
+        response.sendRedirect("./chatting_room.jsp");
     }
     else
     {

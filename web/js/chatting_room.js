@@ -1,5 +1,5 @@
 (function () {
-    var conf, lol, insertI, onChannelSelected, NYLM, claerResizeScroll, getRandomInt;
+    var conf, lol, insertI, onChannelSelected, star;
     var selectedChannelId;
 
     conf = {
@@ -9,6 +9,12 @@
     };
 
     lol = {
+        cursorcolor: "#cdd2d6",
+        cursorwidth: "4px",
+        cursorborder: "none"
+    };
+
+    star = {
         cursorcolor: "#cdd2d6",
         cursorwidth: "4px",
         cursorborder: "none"
@@ -62,6 +68,7 @@
     $(document).ready(function () {
         $(".list-friends").niceScroll(conf);
         $(".messages").niceScroll(lol);
+        $(".starList").niceScroll(star);
         $("#text").keypress(function (e) {
             if (e.keyCode === 13) {
                 insertI();
