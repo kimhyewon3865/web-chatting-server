@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html;charset-euc-kr" %>
+<%@ page language="java" contentType="text/html;charset-euc-kr" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.DriverManager" %>
 <%@ page import="java.sql.SQLException" %>
@@ -26,4 +26,6 @@
     } catch (SQLException e) {
         e.printStackTrace();
     }
+
+
 %>

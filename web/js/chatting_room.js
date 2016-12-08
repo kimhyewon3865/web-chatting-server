@@ -68,7 +68,7 @@
     $(document).ready(function () {
         $(".list-friends").niceScroll(conf);
         $(".messages").niceScroll(lol);
-        $(".starList").niceScroll(star);
+        $("#starList").niceScroll(star);
         $("#text").keypress(function (e) {
             if (e.keyCode === 13) {
                 insertI();
@@ -78,6 +78,12 @@
         return $(".send").click(function () {
             return insertI();
         });
+        $('#list-messages').animate({
+            scrollTop:0
+        }, 'slow');
+        // var d = $('#list-messages');
+        // d.scrollTop(d.prop("scrollHeight"));
+//        $('#list-messages').scrollTop($('#list-messages').prop("scrollHeight"));
 
     });
 

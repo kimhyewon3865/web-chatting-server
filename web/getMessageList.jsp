@@ -3,7 +3,7 @@
 <%@ page import="java.sql.DriverManager" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.util.List" %>
-<%@ page contentType="text/xml; charset=UTF-8" language="java" %>
+<%@ page contentType="text/xml; charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <messages>
     <%
         String url = "jdbc:mysql://localhost:3306/chatting";
@@ -31,5 +31,7 @@
             userNickname="<%= message.getUserNickname() %>"/>
     <%
         }
+        stmt.close();
+        conn.close();
     %>
 </messages>

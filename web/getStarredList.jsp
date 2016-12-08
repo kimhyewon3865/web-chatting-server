@@ -5,7 +5,7 @@
   Time: 오후 7:12
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <stars>
     <%
         String url = "jdbc:mysql://localhost:3306/chatting";

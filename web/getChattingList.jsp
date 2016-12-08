@@ -9,7 +9,7 @@
   Time: 오전 1:59
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/xml; charset=UTF-8" language="java" %>
+<%@ page contentType="text/xml; charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <channels>
 <%
     String url = "jdbc:mysql://localhost:3306/chatting";
@@ -25,5 +25,7 @@
             users="<%= channel.getUserNames(stmt) %>"/>
 <%
     }
+    stmt.close();
+    conn.close();
 %>
 </channels>

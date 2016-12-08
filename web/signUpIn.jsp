@@ -5,7 +5,7 @@
   Time: 오후 11:52
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <html>
 <head>
     <title>signupin</title>
@@ -21,7 +21,7 @@
     <div class="tab-content">
         <div id="signup">
             <h3>Sign Up for Free</h3>
-            <form action="./signInCheck.jsp" method="post">
+            <form action="./signUpCheck.jsp" method="post">
                 <div class="field-wrap">
                     <label>
                         nick Name<span class="req">*</span>
@@ -33,9 +33,9 @@
                     <label>
                         Set A Password<span class="req">*</span>
                     </label>
-                    <input type="password"required autocomplete="off"/>
+                    <input type="password"required autocomplete="off" name="signUpPassword"/>
                 </div>
-                <button type="submit" class="button button-block">Get Started</button>
+                <button class="button button-block">Get Start</button>
             </form>
         </div>
 
@@ -54,7 +54,7 @@
                     </label>
                     <input type="password"required autocomplete="off" name="signInPassword"/>
                 </div>
-                <p class="forgot"><a href="#">Forgot Password?</a></p>
+                <%--<p class="forgot"><a href="#">Forgot Password?</a></p>--%>
                 <button class="button button-block"/>Log In</button>
             </form>
         </div>

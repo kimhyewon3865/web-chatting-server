@@ -12,12 +12,11 @@
   Time: 오전 2:56
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>--%>
+<%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <head>
     <title>채팅방</title>
-    <%--<link href="<c:url value="/res/css/main.css" />" rel="stylesheet">--%>
     <link rel="stylesheet" href="css/style.css">
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js'></script>
@@ -37,7 +36,7 @@
     <div class="nav">
         <ul>
             <li class="homeLeftFloat">
-                <a href="./channelList.jsp">Home</a>
+                <a href="#">hyewon's chatting</a>
             </li>
             <li>
                 <a href="javascript:void(0)" onclick="starButtonToggle()">Star</a>
@@ -73,8 +72,6 @@
         <!-- Left Menu -->
         <div class="left-menu">
             <form class="search">
-                <%--<input placeholder="search..." type="search" id="my-input">--%>
-
                 <input placeholder="search..." type="search" id="my-input" onkeyup="filterFunction()">
                 <input type="submit" value="&#xf002;">
             </form>
@@ -96,7 +93,7 @@
                 %>
                 <li onclick="setGlogalChannelId(<%=channel.getId()%>)" id=<%= channel.getId() %>>
                     <img width="50" height="50"
-                         src=<%= channel.getImageUrl() %> id="profile-image">
+                         src="images/person.png" id="profile-image">
                     <div class="info" id="channelListDiv">
                         <div id="chatting-room-name" class="chatting-room-name"><%= channel.getName() %>
                         </div>
@@ -109,7 +106,6 @@
                 </li>
                 <%
                         }
-//                    resultSet.close();
                         stmt.close();
                         conn.close();
                     } catch (SQLException ex) {
@@ -121,48 +117,9 @@
 
 
         <div class="chat" id="chat">
-            <ul class="messages" id="list-messages">
-                <%--<% List<Message> messages = Message.findAll(null);--%>
-                    <%--for (Message message : messages) {--%>
-                        <%--if (!message.getUserNickname().equals(myNickname)) {--%>
-                <%--%>--%>
+            <ul class="messages" id="list-messages" style="overflow: scroll">
 
-                <%--<li class="friend-with-a-SVAGina">--%>
-                    <%--<div class="head">--%>
-                        <%--<span class="name"><%=message.getUserNickname()%></span>--%>
-                        <%--<span class="time"><%=message.getCreateAt()%></span>--%>
-                    <%--</div>--%>
-                    <%--<div>--%>
-                        <%--<div class="message"><%=message.getText()%>--%>
-                        <%--</div>--%>
-                        <%--<input type="image" class="friendButton"--%>
-                               <%--src="images/star_unselected.png"--%>
-                               <%--starred="false"/>--%>
-                    <%--</div>--%>
-                <%--</li>--%>
-                <%--<% } else {%>--%>
-                <%--<li class="i">--%>
-                    <%--<div class="head">--%>
-                        <%--<span class="name"><%=message.getUserNickname()%></span>--%>
-                        <%--<span class="time"><%=message.getCreateAt()%></span>--%>
-                    <%--</div>--%>
-                    <%--<div>--%>
-                        <%--<div class="message"><%=message.getText()%>--%>
-                        <%--</div>--%>
-                        <%--<input type="image" class="iButton" src="images/star_unselected.png"--%>
-                               <%--starred="false"/>--%>
-                    <%--</div>--%>
-                <%--</li>--%>
-
-                <%--<% }--%>
-                <%--}--%>
-                <%--%>--%>
             </ul>
-
-            <%--<div class="write-form">--%>
-            <%--<textarea class="text-area" placeholder="Type your message" name="e" id="text" rows="2"></textarea>--%>
-            <%--<span class="send">Send</span>--%>
-            <%--</div>--%>
 
             <form class="write-form">
                 <input type="textarea" class="text-area" placeholder="Type your message" name="text" id="text" rows="2">
@@ -173,29 +130,7 @@
 
         <div class="rightMenu" id="rightMenu" style="display: none;">
             <menu class="starList" id="starList">
-                <%--<li>--%>
-                    <%--<img width="50" height="50" src="http://lorempixel.com/50/50/people/2">--%>
-                    <%--<div class="info">--%>
-                        <%--<div>--%>
-                            <%--<span class="user">성시경</span>--%>
-                            <%--<span class="time">2016/11/16 10:15 AM</span>--%>
-                        <%--</div>--%>
-                        <%--<div class="content">안녕ㅎㅎ</div>--%>
-                    <%--</div>--%>
-                <%--</li>--%>
-                <%--<hr size="1">--%>
 
-                <%--<li>--%>
-                    <%--<img width="50" height="50" src="http://lorempixel.com/50/50/people/2">--%>
-                    <%--<div class="info">--%>
-                        <%--<div>--%>
-                            <%--<span class="user">성시경</span>--%>
-                            <%--<span class="time">2016/11/16 10:18 AM</span>--%>
-                        <%--</div>--%>
-                        <%--<div class="content">뭐해?</div>--%>
-                    <%--</div>--%>
-                <%--</li>--%>
-                <%--<hr size="1">--%>
             </menu>
         </div>
     </div>
@@ -290,11 +225,10 @@ function loadChannels(pageFlag) {
                     var name = channel.getAttribute("name");
                     var image = channel.getAttribute("image");
                     var users = channel.getAttribute("users");
-                    var markup = "<li onclick=\"setGlogalChannelId(" + id + ")\" id=\"" + id + "\"><img width=\"50\" height=\"50\" src=\"" + image + "\" id=\"profile-image\"><div class=\"info\" id=\"channelListDiv\"><div id=\"chatting-room-name\" class=\"chatting-room-name\">" + name + "</div><div id=\"chatting-room-users\" class=\"users\">" + users + "</div></div><input type=\"image\" class=\"quit-chat\" src=\"images/x.png\" onclick=\"quitChat(" + id + ", 'chat')\" id=\"quitButton\"/></li>";
+                    var markup = "<li onclick=\"setGlogalChannelId(" + id + ")\" id=\"" + id + "\"><img width=\"50\" height=\"50\" src=\"images/person.png\" id=\"profile-image\"><div class=\"info\" id=\"channelListDiv\"><div id=\"chatting-room-name\" class=\"chatting-room-name\">" + name + "</div><div id=\"chatting-room-users\" class=\"users\">" + users + "</div></div><input type=\"image\" class=\"quit-chat\" src=\"images/x.png\" onclick=\"quitChat(" + id + ", 'chat')\" id=\"quitButton\"/></li>";
                     document.getElementById("list-friends").innerHTML += markup;
                 }
             } else {
-                //home innerhtml
             }
         }
     };
