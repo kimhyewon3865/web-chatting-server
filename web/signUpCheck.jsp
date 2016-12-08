@@ -13,7 +13,6 @@
 <%
     String nickName = request.getParameter("signUpNickName");
     String pwd = request.getParameter("signUpPassword");
-
     String url = "jdbc:mysql://localhost:3306/chatting";
     Connection conn = DriverManager.getConnection(url, "root", "dltmf1995");
     Statement stmt = conn.createStatement();
@@ -21,19 +20,12 @@
     ResultSet rs =  stmt.executeQuery(sql);
     Integer count = 0;
     Integer firstChannelId = 0;
-    //Integer result = rs.getInt("count");
-    //System.out.println("nic>>" + nickName + " pwd>>" + pwd + " result>>" +result);
-
     if (rs.next()) {
         count = rs.getInt(1);
     }
 
-
-
-
     System.out.println("nic>>" + nickName + " pwd>>" + pwd + " result>>" + count);
 
-    // id, pwd가 맞을 경우 실행
     if(count == 0)
     {
         sql = "INSERT INTO users VALUES (\'"+ nickName + "\',\'" + pwd +"\');";
@@ -46,7 +38,6 @@
     }
     else
     {
-        //response.sendRedirect("./chatting_room.jsp");
     }
 
     rs.close();

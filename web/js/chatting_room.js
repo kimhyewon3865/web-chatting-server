@@ -45,11 +45,6 @@
             scrollTop:0
         }, 'slow');
 
-
-        var d = $('#starList');
-        d.scrollTop(d.prop("scrollHeight"));
-//        $('#list-messages').scrollTop($('#list-messages').prop("scrollHeight"));
-
     });
 
 }).call(this);

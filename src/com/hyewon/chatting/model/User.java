@@ -9,6 +9,4 @@ public class User {
    // public String id;
     public String password;
     public String nickName;
-
-//    public List<Channel> channels;
 }

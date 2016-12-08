@@ -29,4 +29,3 @@
         e.printStackTrace();
     }
 %>
-intStarred

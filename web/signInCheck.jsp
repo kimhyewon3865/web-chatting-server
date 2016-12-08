@@ -11,13 +11,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 
 <%
-    // 로그인 정보 설정
-    //String userNickName="id";
-   // String userPWD="pwd";
-
-
-
-    // login.jsp로부터 form data를 받는다
     String nickName = request.getParameter("signInNickName");
     String pwd = request.getParameter("signInPassword");
 
@@ -28,8 +21,6 @@
     ResultSet rs =  stmt.executeQuery(sql);
     Integer count = 0;
     Integer firstChannelId = 0;
-    //Integer result = rs.getInt("count");
-    //System.out.println("nic>>" + nickName + " pwd>>" + pwd + " result>>" +result);
 
     if (rs.next()) {
         count = rs.getInt(1);
@@ -42,10 +33,6 @@
     if (rs.next()) {
         firstChannelId = rs.getInt(1);
     }
-
-    //System.out.println("nic>>" + nickName + " pwd>>" + pwd + " result>>" + count);
-
-    // id, pwd가 맞을 경우 실행
     if(count == 1)
     {
         session.setAttribute("s_Id", nickName);
@@ -55,7 +42,6 @@
     }
     else
     {
-        //response.sendRedirect("./chatting_room.jsp");
     }
 
     rs.close();

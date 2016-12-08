@@ -104,33 +104,4 @@ public class Message {
         message.userNickname = resultSet.getString("user_nickname");
         return message;
     }
-
-//    public static List<Message> findAll(Statement statement) throws SQLException { // TODO: DB에 연결해서 구현해야함
-//        List<Message> messages = new ArrayList<>();
-////		ResultSet resultSet = statement.executeQuery("SELECT * FROM channels;");
-////		while (resultSet.next())
-////			channels.add(convertResultSetToChannel(resultSet));
-//
-//        for (int i = 0; i < 2; i++) {
-//            Message message = new Message();
-//            message.id = i;
-//            message.text = "aa";
-//            message.starred = false;
-//            message.createdAt = 2014;
-//            message.userNickname = "b";
-//            messages.add(message);
-//        }
-//
-//        for (int i = 0; i < 2; i++) {
-//            Message message = new Message();
-//            message.id = 3865;
-//            message.text = "bb";
-//            message.starred = false;
-//            message.createdAt = 2014;
-//            message.userNickname = "h";
-//            messages.add(message);
-//        }
-//        return messages;
-//    }
-
 }

@@ -28,8 +28,6 @@
     long nowChannelId = 1;
     String myNickName = (String)session.getAttribute("s_Id");
     Integer lastChannelId = (Integer)session.getAttribute("s_channel");
-
-//    System.out.println("mynic>> "+myNickName);
 %>
 <div class="screenui">
     <!-- Navigation -->
@@ -138,10 +136,10 @@
 
 <script>
 
-var myNickname = "<%=myNickName%>"; // TODO: b 대신 로그인한 유저 닉네임을 설정
-var globalChannelId = <%=lastChannelId%>; // TODO: 가장상위의 채널 아이디 설정 SELECT MIN(channel_id) FROM chatting.users_channels WHERE user_nickname="b";
+var myNickname = "<%=myNickName%>"; 
+var globalChannelId = <%=lastChannelId%>; 
 var globalLastCreatedAt = 0;
-var clickNewChannelFlag = 0;// TODO: 새로운 채널 눌렀을때 기존 채팅 내용 remove
+var clickNewChannelFlag = 0;
 
 function insertChannel(pageFlag) {
     var httpReq = getInstance();
@@ -156,7 +154,6 @@ function insertChannel(pageFlag) {
         httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         httpReq.onreadystatechange = function () {
             if (httpReq.readyState == 4 && httpReq.status == 200) {
-                alert(httpReq.responseText);
                 loadChannels(pageFlag);
                 addFunction();
 
@@ -181,7 +178,6 @@ function quitChat(channelId, pageFlag) {
 
         httpReq.onreadystatechange = function () {
             if (httpReq.readyState == 4 && httpReq.status == 200) {
-                alert(httpReq.responseText);
                 loadChannels(pageFlag);
             }
 
@@ -259,8 +255,7 @@ setInterval(function loadMessages() {
 
     var httpReq = getInstance();
     var url = "getMessageList.jsp?channelId=" + globalChannelId + "&createdAt=" + globalLastCreatedAt;
-    // TODO: 마지막 메시지의 createdAt을 받아와서 url의 파라미터로 설정해야함
-
+    
     httpReq.open("GET", url, true);
     httpReq.onreadystatechange = function () {
         if (httpReq.readyState == 4 && httpReq.status == 200) {
@@ -312,7 +307,7 @@ setInterval(function loadMessages() {
 function insertMessage() {
     var httpReq = getInstance();
     var text = document.getElementById("text").value;
-    var channelId = document.getElementById("channelId").value; //long type
+    var channelId = document.getElementById("channelId").value;
     var params = "text=" + text + "&channelId=" + globalChannelId + "&userNickname=" + myNickname;
 
     if (httpReq) {
@@ -320,7 +315,6 @@ function insertMessage() {
         httpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         httpReq.onreadystatechange = function () {
             if (httpReq.readyState == 4 && httpReq.status == 200) {
-                alert(httpReq.responseText);
                 document.getElementById("text").value = "";
             }
         };
@@ -344,7 +338,7 @@ $(function () {
     $("li").click(function () {
         $("li").removeAttr("style");
         $(this).css("background-color", "lightblue");
-    }); //이부분이 li 클릭햇을때 이벤
+    }); 
 });
 function filterFunction() {
     var input, filter, ul, li, a, i;
@@ -405,35 +399,27 @@ function loadStarredMessage() {
                 } else {
                     return null;
                 }
-
                 var i;
                 var stars = xmlDocument.getElementsByTagName("star");
-
                 for (i = 0; i < stars.length; i++) {
                     var star = stars[i];
 
                     var text = star.getAttribute("text");
-//                    var createdAt = star.getAttribute("createdAt");
                     var userNickname = star.getAttribute("userNickname");
 
-                    var markup = "<li><img width=\"50\" height=\"50\" src=\"http://lorempixel.com/50/50/people/2\"><div class=\"info\"><div><span class=\"user\">" + userNickname + "</span></div><div class=\"content\">"+text+"</div></div></li><hr size=\"1\">";
+                    var markup = "<li><img width=\"50\" height=\"50\" src=\"images/person.png\"><div class=\"info\"><div><span class=\"user\">" + userNickname + "</span></div><div class=\"content\">"+text+"</div></div></li><hr size=\"1\">";
 
                     document.getElementById("starList").innerHTML += markup;
                 }
             }
-
         };
         httpReq.send();
-
 }
 
 function starButtonClick(messageId) {
     var button = document.getElementById("messageId:"+messageId)
-
     var oldStarred = button.getAttribute("starred");
     var newStarred = (oldStarred == "true" ? "false" : "true");
-
-
     var httpReq = getInstance();
     var params = "messageId=" + messageId + "&starred=" + newStarred;
 
@@ -454,11 +440,7 @@ function starButtonClick(messageId) {
         button.src = 'images/star_selected.png';
         button.setAttribute("starred", "true")
     }
-
-
 }
-
-
 </script>
 </body>
 </html>

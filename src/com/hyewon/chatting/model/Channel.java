@@ -1,12 +1,9 @@
 package com.hyewon.chatting.model;
-
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * Created by kimhyewon on 2016. 11. 30..
@@ -16,11 +13,6 @@ public class Channel {
 	private long id;
 	private String name;
 	private String imageUrl;
-
-//    public List<User> users;
-//    public List<Message> messages;
-
-	// Default Getter & Setter
 
 	public long getId() {
 		return id;

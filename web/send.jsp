@@ -10,10 +10,8 @@
     String text = request.getParameter("text");
     String channelId = request.getParameter("channelId"); //long type
     String userNickname = request.getParameter("userNickname");
-    //long createdAt = Long.parseLong((new SimpleDateFormat("yyyyMMddHHmmss")).format(new Date()));
     long createdAt = System.currentTimeMillis();
     System.out.println("createAt >> " + createdAt);
-
     String url = "jdbc:mysql://localhost:3306/chatting";
     try {
         Connection conn = DriverManager.getConnection(url, "root", "dltmf1995");
@@ -26,6 +24,4 @@
     } catch (SQLException e) {
         e.printStackTrace();
     }
-
-
 %>

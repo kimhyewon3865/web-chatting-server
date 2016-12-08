@@ -36,15 +36,11 @@
             e.printStackTrace();
         }
     }
-
     StringTokenizer st = new StringTokenizer(userNicknames,",");
-
     while(st.hasMoreTokens()) {
         user = st.nextToken();
         sql = "insert into users_channels(user_nickname, channel_id) values( '" + user + "'," + lastChannelId +")";
-
         stmt.executeUpdate(sql);
-
     }
     rs.close();
     stmt.close();
