@@ -42,6 +42,15 @@
     }
     else
     {
+        %>
+<html>
+<body>
+로그인 실패
+</body>
+</html>
+<%
+        response.sendRedirect("./signUpIn.jsp");
+
     }
 
     rs.close();

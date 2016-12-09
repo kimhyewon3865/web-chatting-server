@@ -8,6 +8,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <%
     session.invalidate(); // 세션 삭제
-    //response.sendRedirect("./signUpIn.jsp"); // main.jsp 에 session 정보를 보낸다
-pageContext.forward("./signUpIn.jsp");
 %>

@@ -40,11 +40,7 @@
                 <a href="javascript:void(0)" onclick="starButtonToggle()">Star</a>
             </li>
             <li class="dropdown">
-                <a href="javascript:void(0)" class="dropbtn" onclick="myFunction()">logout</a>
-                <div class="dropdown-content" id="my-dropdown" style="right: 19px">
-                    <%--<a href="#">Profile</a>--%>
-                    <a href="#">Logout</a>
-                </div>
+                <a href="./signUpIn.jsp" class="dropbtn" onclick="myFunction()">logout</a>
             </li>
             <li class="dropdown">
                 <a href="javascript:void(0)" class="dropbtn" onclick="addFunction()">Add</a>
@@ -140,6 +136,9 @@ var myNickname = "<%=myNickName%>";
 var globalChannelId = <%=lastChannelId%>; 
 var globalLastCreatedAt = 0;
 var clickNewChannelFlag = 0;
+
+$("#"+globalChannelId).css("background-color", "lightblue");
+
 
 function insertChannel(pageFlag) {
     var httpReq = getInstance();
@@ -292,16 +291,21 @@ setInterval(function loadMessages() {
                     globalLastCreatedAt = createdAt;
                 var markup;
 
+
+
                 if (myNickname == userNickname) {
                     markup = "<li class=\"i\"><div class=\"head\"><span class=\"name\">" + userNickname+ "</span><span class=\"time\">" + createdAtString + "</span></div><div><div class=\"message\">" + text + "</div><input id=\"" + "messageId:" + id + "\" type=\"image\" class=\"iButton\" src=\"" + src + "\" starred=\"" + starred + "\" onclick=\"starButtonClick("+ id +")\"/></div></li>";
                 } else {
                     markup = "<li class=\"friend-with-a-SVAGina\"><div class=\"head\"><span class=\"name\">" + userNickname+ "</span><span class=\"time\">" + createdAtString + "</span></div><div><div class=\"message\">" + text + "</div><input id=\"" + "messageId:" + id + "\" type=\"image\" class=\"friendButton\" src=\"" + src + "\" starred=\"" + starred + "\" onclick=\"starButtonClick("+ id +")\"/></div></li>";
                 }
                 document.getElementById("list-messages").innerHTML += markup;
+                $("#list-messages").scrollTop(document.getElementById("list-messages").scrollHeight);
+
             }
         }
     };
     httpReq.send();
+
 },1000);
 
 function insertMessage() {
@@ -320,6 +324,7 @@ function insertMessage() {
         };
         httpReq.send(params);
     }
+
 }
 
 function setGlogalChannelId(nowChannelId) {

@@ -44,7 +44,9 @@
         $('#list-messages').animate({
             scrollTop:0
         }, 'slow');
-
+        $("#list-messages").scrollTop(document.getElementById("list-messages").scrollHeight);
     });
+    //document.body.scrollTop = document.body.scrollHeight;
+
 
 }).call(this);

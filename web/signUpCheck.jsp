@@ -24,8 +24,6 @@
         count = rs.getInt(1);
     }
 
-    System.out.println("nic>>" + nickName + " pwd>>" + pwd + " result>>" + count);
-
     if(count == 0)
     {
         sql = "INSERT INTO users VALUES (\'"+ nickName + "\',\'" + pwd +"\');";
@@ -37,7 +35,13 @@
         response.sendRedirect("./chatting_room.jsp");
     }
     else
-    {
+    {%>
+<html>
+<body>
+회원가입 실패
+</body>
+</html>
+<%
     }
 
     rs.close();
