@@ -224,6 +224,7 @@ function loadChannels(pageFlag) {
                     document.getElementById("list-friends").innerHTML += markup;
                 }
             } else {
+              
             }
         }
     };
@@ -305,8 +306,10 @@ setInterval(function loadMessages() {
         }
     };
     httpReq.send();
+  //  loadChannels("chat");
+   // $("#"+globalChannelId).css("background-color", "lightblue");
 
-},1000);
+},500);
 
 function insertMessage() {
     var httpReq = getInstance();
